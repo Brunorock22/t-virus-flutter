@@ -14,6 +14,10 @@ dependencies:
     sdk: flutter
   # Custom CheckBox
   circular_check_box:
+  #FlushBar is used to advise user
+  flushbar:
+  #Get the lat and log of the user
+  geolocator:
 
 
   cupertino_icons: ^0.1.3

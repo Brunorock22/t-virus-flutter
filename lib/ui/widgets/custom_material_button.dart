@@ -21,7 +21,7 @@ Widget customMaterialButton(
           context, MaterialPageRoute(builder: (context) => navigateToScreen)),
       child: new Text(title,
           style: new TextStyle(
-              fontSize: 16.0, color: textColor, fontFamily: fontFamily)),
+              fontSize: 25.0, color: textColor, fontFamily: fontFamily)),
     ),
   );
 }

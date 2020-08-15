@@ -48,6 +48,17 @@ class WelcomePage extends StatelessWidget{
                             color: textsColor,
                             fontSize: 18),
                         textAlign: TextAlign.center,
+                      )
+                      ,Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text(
+                          'The world, as we know it, has fallen into an apocalyptic scenario. The "Influenzer T-Virus" (a.k.a. Twiter Virus) is transforming human beings into stupid beasts (a.k.a. Zombies), hungry to cancel humans and eat their limbs.',
+                          style: TextStyle(
+                              fontFamily: 'ZOMBIETEXT',
+                              color: textsColor,
+                              fontSize: 11),
+                          textAlign: TextAlign.center,
+                        ),
                       ),
                       Padding(
                         padding: const EdgeInsets.all(8.0),
