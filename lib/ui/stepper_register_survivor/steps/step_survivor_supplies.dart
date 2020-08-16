@@ -1,13 +1,16 @@
 import 'package:circular_check_box/circular_check_box.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:geolocator/geolocator.dart';
-import 'package:t_virus/core/service/gps_service.dart';
+import 'package:t_virus/core/model/survivor.dart';
 import 'package:t_virus/ui/shared/app_colors.dart';
 import 'package:t_virus/ui/widgets/custom_outline_text_field.dart';
-import 'package:t_virus/ui/widgets/flushbar_custom.dart';
 
+// ignore: must_be_immutable
 class StepSurvivorSupplies extends StatefulWidget {
+  Survivor survivor;
+
+  StepSurvivorSupplies(this.survivor);
+
   @override
   _StepSurvivorSuppliesState createState() => _StepSurvivorSuppliesState();
 }
@@ -24,6 +27,7 @@ class _StepSurvivorSuppliesState extends State<StepSurvivorSupplies> {
 
   @override
   Widget build(BuildContext context) {
+    widget.survivor.name = survivorName.text;
     return  Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
@@ -187,66 +191,7 @@ class _StepSurvivorSuppliesState extends State<StepSurvivorSupplies> {
     );
   }
 
-  Widget sendButton(
-      {title: String,
-        Color backgroundColor = accentColor,
-        fontFamily: String,
-        minWidth = 150.0,
-        Color textColor = accentColor,
-        @required BuildContext context,
-        @required Widget navigateToScreen}) {
-    return new Padding(
-      padding: EdgeInsets.fromLTRB(0.0, 1.0, 0.0, 0.0),
-      child: new MaterialButton(
-        shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.all(Radius.circular(5.0))),
-        elevation: 1.0,
-        minWidth: minWidth,
-        height: 35,
-        color: backgroundColor,
-        onPressed: () => verifyField(),
-        child: new Text(title,
-            style: new TextStyle(
-                fontSize: 25.0, color: textColor, fontFamily: fontFamily)),
-      ),
-    );
-  }
 
-  void verifyField() {
-    if (survivorName.text == "") {
-      FlusBarCustom(
-          "Fill the field Name.",
-          context,
-          Icon(
-            Icons.error,
-            color: errorColor,
-          )).flushbar();
-    } else if (survivorAge.text == "") {
-      FlusBarCustom(
-          "Fill the field Age.",
-          context,
-          Icon(
-            Icons.error,
-            color: errorColor,
-          )).flushbar();
-    } else if (!femaleCheck && !maleCheck) {
-      FlusBarCustom(
-          "Check the Gender box..",
-          context,
-          Icon(
-            Icons.error,
-            color: errorColor,
-          )).flushbar();
-    } else {
-      getUserLocation().then((value) {
-//        Navigator.push(
-//            context, MaterialPageRoute(builder: (context) => StepperWidget()));
-      });
-    }
-  }
 
-  Future<Position> getUserLocation() async {
-    GPSService gpsService = GPSService();
-    return gpsService.getUserLocation();
-  }
+
 }

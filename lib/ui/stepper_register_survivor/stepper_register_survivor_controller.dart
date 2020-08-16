@@ -1,5 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:t_virus/core/model/location.dart';
+import 'package:t_virus/core/model/survivor.dart';
+import 'package:t_virus/core/service/gps_service.dart';
 import 'package:t_virus/ui/shared/app_colors.dart';
+import 'package:t_virus/ui/welcome_page.dart';
+import 'package:t_virus/ui/widgets/flushbar_custom.dart';
 
 
 import 'steps/step_survivor_information.dart';
@@ -13,13 +19,14 @@ class StepperRegisterSuvivorController extends StatefulWidget {
 
 class _StepperRegisterSuvivorControllerState
     extends State<StepperRegisterSuvivorController> {
-  bool maleCheck = false;
-  bool femaleCheck = false;
   int _currentStep = 0;
 
-  final TextEditingController survivorName = TextEditingController();
-  final TextEditingController survivorAge = TextEditingController();
+  Survivor survivor =  Survivor();
 
+  TextEditingController survivorName = TextEditingController();
+  TextEditingController survivorAge = TextEditingController();
+
+  bool isFieldsFilled = false;
   @override
   Widget build(BuildContext context) {
     //Size of cicle container with the app icon
@@ -38,37 +45,43 @@ class _StepperRegisterSuvivorControllerState
               _currentStep > 0 ? () => setState(() => _currentStep -= 1) : null,
           controlsBuilder: (BuildContext context,
               {VoidCallback onStepContinue, VoidCallback onStepCancel}) {
-            return Padding(
-              padding: const EdgeInsets.only(top: 16.0),
-              child: Row(
-                mainAxisSize: MainAxisSize.max,
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: <Widget>[
-                  RaisedButton.icon(
-                    icon: Icon(
-                      Icons.navigate_next,
-                      color: primaryColor,
-                    ),
-                    onPressed: onStepContinue,
-                    label: Text('CONTINUE'),
-                    textColor: primaryColor,
-                    color: accentColor,
+            return Row(
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                _currentStep == 1 // this is the last step
+                    ?
+            sendButton(
+                textColor: primaryColor,
+                title: 'SEND',
+                fontFamily: "ZOMBIE",
+                navigateToScreen: WelcomePage(),
+                context: context)                  :
+                RaisedButton.icon(
+                  icon: Icon(
+                    Icons.navigate_next,
+                    color: primaryColor,
                   ),
-                ],
-              ),
+                  // ignore: unrelated_type_equality_checks
+                  onPressed:  onStepContinue ,
+                  label: Text('CONTINUE',style: TextStyle(fontFamily: "ZOMBIE", fontSize: 25),),
+                  textColor: primaryColor,
+                  color: accentColor,
+                ),
+              ],
             );
           },
           steps: <Step>[
             new Step(
-              title: new Text('Survivor'),
+              title: new Text('Survivor Informations', style: TextStyle(color: accentColor, fontFamily: 'ZOMBIETEXT', fontWeight: FontWeight.bold, fontSize: 20),),
               isActive: _currentStep >= 0,
               state:
                   _currentStep >= 0 ? StepState.complete : StepState.disabled,
-              content: StepSurvivorInformation(),
+              content: StepSurvivorInformation( survivor, survivorName, survivorAge),
             ),
             Step(
-              title: new Text('Shipping'),
-              content: StepSurvivorSupplies(),
+              title: new Text('Supplies', style: TextStyle(color: accentColor, fontFamily: 'ZOMBIETEXT', fontWeight: FontWeight.bold, fontSize: 20),),
+              content: StepSurvivorSupplies( survivor),
               isActive: _currentStep >= 0,
               state:
                   _currentStep >= 1 ? StepState.complete : StepState.disabled,
@@ -77,41 +90,77 @@ class _StepperRegisterSuvivorControllerState
     );
   }
 
-  Widget _divider() {
-    return Container(
-      margin: EdgeInsets.symmetric(vertical: 5),
-      child: Row(
-        children: <Widget>[
-          SizedBox(
-            width: 20,
-          ),
-          Expanded(
-            child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 10),
-              child: Divider(
-                color: accentColor,
-                thickness: 1,
-              ),
-            ),
-          ),
-          Text(
-            'Gender',
-            style: TextStyle(color: accentColor),
-          ),
-          Expanded(
-            child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 10),
-              child: Divider(
-                color: accentColor,
-                thickness: 1,
-              ),
-            ),
-          ),
-          SizedBox(
-            width: 20,
-          ),
-        ],
-      ),
+  Widget sendButton(
+      {title: String,
+        Color backgroundColor = accentColor,
+        fontFamily: String,
+        minWidth = 150.0,
+        Color textColor = accentColor,
+        @required BuildContext context,
+        @required Widget navigateToScreen}) {
+    return new MaterialButton(
+      shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(Radius.circular(5.0))),
+      elevation: 1.0,
+      minWidth: minWidth,
+      height: 35,
+      color: backgroundColor,
+      onPressed: () => verifyField(),
+      child: new Text(title,
+          style: new TextStyle(
+              fontSize: 25.0, color: textColor, fontFamily: fontFamily)),
     );
+  }
+
+  bool verifyField() {
+    if (survivorName.text == "") {
+      FlusBarCustom(
+          "Fill the field Name.",
+          context,
+          Icon(
+            Icons.error,
+            color: errorColor,
+          )).flushbar();
+      return isFieldsFilled =  false;
+    } else if (survivorAge.text == "") {
+      FlusBarCustom(
+          "Fill the field Age.",
+          context,
+          Icon(
+            Icons.error,
+            color: errorColor,
+          )).flushbar();
+      return isFieldsFilled =  false;
+
+    } else if (survivor.gender == null) {
+      print(survivor.gender);
+      FlusBarCustom(
+          "Check the Gender box..",
+          context,
+          Icon(
+            Icons.error,
+            color: errorColor,
+          )).flushbar();
+      return isFieldsFilled =  false;
+
+    } else {
+
+      survivor.age = int.parse(survivorAge.text);
+      getUserLocation().then((value) {
+        print(value);
+        LatLog latLog = LatLog(latitude: value.latitude, longitude:  value.longitude);
+        survivor.location = latLog;
+//        Navigator.push(
+//            context, MaterialPageRoute(builder: (context) => StepperWidget()));
+      });
+      return isFieldsFilled =  true;
+
+
+    }
+  }
+
+  Future<Position> getUserLocation() async {
+    GPSService gpsService = GPSService();
+    return gpsService.getUserLocation();
   }
 }

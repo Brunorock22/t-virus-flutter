@@ -1,27 +1,37 @@
 import 'package:circular_check_box/circular_check_box.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:t_virus/core/enum/gender.dart';
+import 'package:t_virus/core/model/survivor.dart';
 import 'package:t_virus/ui/shared/app_colors.dart';
 import 'package:t_virus/ui/widgets/custom_outline_text_field.dart';
 
 class StepSurvivorInformation extends StatefulWidget {
+  Survivor survivor;
+
+  TextEditingController survivorName = TextEditingController();
+  TextEditingController survivorAge = TextEditingController();
+
+
+  StepSurvivorInformation(this.survivor, this.survivorName, this.survivorAge);
+
   @override
-  _StepSurvivorInformationState createState() => _StepSurvivorInformationState();
+  _StepSurvivorInformationState createState() =>
+      _StepSurvivorInformationState();
 }
 
 class _StepSurvivorInformationState extends State<StepSurvivorInformation> {
   bool maleCheck = false;
   bool femaleCheck = false;
 
-  final TextEditingController survivorName = TextEditingController();
-  final TextEditingController survivorAge = TextEditingController();
 
   final double circleRadius = 100.0;
   final double circleBorderWidth = 8.0;
 
   @override
   Widget build(BuildContext context) {
-    return  Column(
+
+    return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
         Stack(
@@ -36,9 +46,8 @@ class _StepSurvivorInformationState extends State<StepSurvivorInformation> {
                     padding: const EdgeInsets.only(top: 30.0),
                     child: Column(
                       children: <Widget>[
-                        showMaterialTextFiel(survivorName, "Name",
-                            heigth: 50),
-                        showMaterialTextFiel(survivorAge, "Age",
+                        showMaterialTextFiel(widget.survivorName, "Name", heigth: 50),
+                        showMaterialTextFiel(widget.survivorAge, "Age",
                             heigth: 50,
                             inputType: TextInputType.number,
                             maxLength: 3),
@@ -54,8 +63,8 @@ class _StepSurvivorInformationState extends State<StepSurvivorInformation> {
             Container(
               width: circleRadius,
               height: circleRadius,
-              decoration: ShapeDecoration(
-                  shape: CircleBorder(), color: primaryColor),
+              decoration:
+                  ShapeDecoration(shape: CircleBorder(), color: primaryColor),
               child: Padding(
                 padding: EdgeInsets.all(circleBorderWidth),
                 child: DecoratedBox(
@@ -79,7 +88,9 @@ class _StepSurvivorInformationState extends State<StepSurvivorInformation> {
         ),
       ],
     );
+
   }
+
   Widget _divider() {
     return Container(
       margin: EdgeInsets.symmetric(vertical: 5),
@@ -142,9 +153,13 @@ class _StepSurvivorInformationState extends State<StepSurvivorInformation> {
                   setState(() {
                     if (touched) {
                       maleCheck = touched;
+                      widget.survivor.gender = Gender.MALE;
+
                       femaleCheck = false;
                     } else {
                       maleCheck = touched;
+                      widget.survivor.gender = Gender.FEMALE;
+
                       femaleCheck = true;
                     }
                   });
@@ -171,9 +186,12 @@ class _StepSurvivorInformationState extends State<StepSurvivorInformation> {
                   setState(() {
                     if (touched) {
                       femaleCheck = touched;
+                      widget.survivor.gender = Gender.FEMALE;
+
                       maleCheck = false;
                     } else {
                       femaleCheck = touched;
+                      widget.survivor.gender = Gender.MALE;
                       maleCheck = true;
                     }
                   });
