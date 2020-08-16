@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:t_virus/ui/register_survivor.dart';
+import 'file:///D:/Multimidia/Projetos/t_virus/lib/ui/stepper_register_survivor/stepper_register_survivor_controller.dart';
 import 'package:t_virus/ui/welcome_page.dart';
 
 import 'ui/shared/app_colors.dart';
@@ -17,14 +17,16 @@ class MyApp extends StatelessWidget {
         primaryColor: primaryColor,
         accentColor: accentColor,
         buttonTheme: ButtonThemeData(
-          buttonColor: accentColor,
-
-        ),
+          textTheme: ButtonTextTheme.accent,
+            buttonColor: accentColor,
+            shape: RoundedRectangleBorder(
+              borderRadius: new BorderRadius.circular(5.0),
+              //side: BorderSide(color: Colors.brown),
+            )),
       ),
       initialRoute: '/welcome_page',
       routes: {
         '/welcome_page': (context) => WelcomePage(),
-        '/register_survivor': (context) => RegisterSurvivor(),
       },
     );
   }

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:t_virus/core/util/utils.dart';
 
-import 'register_survivor.dart';
+import 'stepper_register_survivor/stepper_register_survivor_controller.dart';
 import 'shared/app_colors.dart';
 import 'widgets/custom_material_button.dart';
 
@@ -68,7 +68,7 @@ class WelcomePage extends StatelessWidget{
                         ),
                       ),
                       customMaterialButton(
-                          title: 'START', fontFamily: "ZOMBIETEXT", navigateToScreen: RegisterSurvivor(),context: mContext,backgroundColor: secondaryColor)
+                          title: 'START', fontFamily: "ZOMBIETEXT", navigateToScreen: StepperRegisterSuvivorController(),context: mContext,backgroundColor: secondaryColor)
                     ],
                   ),
                 ),
