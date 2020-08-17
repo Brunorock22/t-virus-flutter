@@ -7,7 +7,6 @@ import 'package:t_virus/ui/shared/app_colors.dart';
 import 'package:t_virus/ui/welcome_page.dart';
 import 'package:t_virus/ui/widgets/flushbar_custom.dart';
 
-
 import 'steps/step_survivor_information.dart';
 import 'steps/step_survivor_supplies.dart';
 
@@ -21,18 +20,15 @@ class _StepperRegisterSuvivorControllerState
     extends State<StepperRegisterSuvivorController> {
   int _currentStep = 0;
 
-  Survivor survivor =  Survivor();
+  Survivor survivor = Survivor();
 
   TextEditingController survivorName = TextEditingController();
   TextEditingController survivorAge = TextEditingController();
 
   bool isFieldsFilled = false;
+
   @override
   Widget build(BuildContext context) {
-    //Size of cicle container with the app icon
-    final double circleRadius = 100.0;
-    final double circleBorderWidth = 8.0;
-
     return Scaffold(
       backgroundColor: secondaryColor,
       body: new Stepper(
@@ -50,38 +46,55 @@ class _StepperRegisterSuvivorControllerState
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 _currentStep == 1 // this is the last step
-                    ?
-            sendButton(
-                textColor: primaryColor,
-                title: 'SEND',
-                fontFamily: "ZOMBIE",
-                navigateToScreen: WelcomePage(),
-                context: context)                  :
-                RaisedButton.icon(
-                  icon: Icon(
-                    Icons.navigate_next,
-                    color: primaryColor,
-                  ),
-                  // ignore: unrelated_type_equality_checks
-                  onPressed:  onStepContinue ,
-                  label: Text('CONTINUE',style: TextStyle(fontFamily: "ZOMBIE", fontSize: 25),),
-                  textColor: primaryColor,
-                  color: accentColor,
-                ),
+                    ? sendButton(
+                        textColor: primaryColor,
+                        title: 'SEND',
+                        fontFamily: "ZOMBIE",
+                        navigateToScreen: WelcomePage(),
+                        context: context)
+                    : RaisedButton.icon(
+                        icon: Icon(
+                          Icons.navigate_next,
+                          color: primaryColor,
+                        ),
+                        // ignore: unrelated_type_equality_checks
+                        onPressed: onStepContinue,
+                        label: Text(
+                          'CONTINUE',
+                          style: TextStyle(fontFamily: "ZOMBIE", fontSize: 25),
+                        ),
+                        textColor: primaryColor,
+                        color: accentColor,
+                      ),
               ],
             );
           },
           steps: <Step>[
             new Step(
-              title: new Text('Survivor Informations', style: TextStyle(color: accentColor, fontFamily: 'ZOMBIETEXT', fontWeight: FontWeight.bold, fontSize: 20),),
+              title: new Text(
+                'Survivor Informations',
+                style: TextStyle(
+                    color: accentColor,
+                    fontFamily: 'ZOMBIETEXT',
+                    fontWeight: FontWeight.bold,
+                    fontSize: 20),
+              ),
               isActive: _currentStep >= 0,
               state:
                   _currentStep >= 0 ? StepState.complete : StepState.disabled,
-              content: StepSurvivorInformation( survivor, survivorName, survivorAge),
+              content:
+                  StepSurvivorInformation(survivor, survivorName, survivorAge),
             ),
             Step(
-              title: new Text('Supplies', style: TextStyle(color: accentColor, fontFamily: 'ZOMBIETEXT', fontWeight: FontWeight.bold, fontSize: 20),),
-              content: StepSurvivorSupplies( survivor),
+              title: new Text(
+                'Supplies',
+                style: TextStyle(
+                    color: accentColor,
+                    fontFamily: 'ZOMBIETEXT',
+                    fontWeight: FontWeight.bold,
+                    fontSize: 20),
+              ),
+              content: StepSurvivorSupplies(survivor),
               isActive: _currentStep >= 0,
               state:
                   _currentStep >= 1 ? StepState.complete : StepState.disabled,
@@ -92,12 +105,12 @@ class _StepperRegisterSuvivorControllerState
 
   Widget sendButton(
       {title: String,
-        Color backgroundColor = accentColor,
-        fontFamily: String,
-        minWidth = 150.0,
-        Color textColor = accentColor,
-        @required BuildContext context,
-        @required Widget navigateToScreen}) {
+      Color backgroundColor = accentColor,
+      fontFamily: String,
+      minWidth = 150.0,
+      Color textColor = accentColor,
+      @required BuildContext context,
+      @required Widget navigateToScreen}) {
     return new MaterialButton(
       shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(5.0))),
@@ -121,7 +134,7 @@ class _StepperRegisterSuvivorControllerState
             Icons.error,
             color: errorColor,
           )).flushbar();
-      return isFieldsFilled =  false;
+      return isFieldsFilled = false;
     } else if (survivorAge.text == "") {
       FlusBarCustom(
           "Fill the field Age.",
@@ -130,8 +143,7 @@ class _StepperRegisterSuvivorControllerState
             Icons.error,
             color: errorColor,
           )).flushbar();
-      return isFieldsFilled =  false;
-
+      return isFieldsFilled = false;
     } else if (survivor.gender == null) {
       print(survivor.gender);
       FlusBarCustom(
@@ -141,21 +153,17 @@ class _StepperRegisterSuvivorControllerState
             Icons.error,
             color: errorColor,
           )).flushbar();
-      return isFieldsFilled =  false;
-
+      return isFieldsFilled = false;
     } else {
-
       survivor.age = int.parse(survivorAge.text);
       getUserLocation().then((value) {
-        print(value);
-        LatLog latLog = LatLog(latitude: value.latitude, longitude:  value.longitude);
+        LatLog latLog =
+            LatLog(latitude: value.latitude, longitude: value.longitude);
         survivor.location = latLog;
 //        Navigator.push(
 //            context, MaterialPageRoute(builder: (context) => StepperWidget()));
       });
-      return isFieldsFilled =  true;
-
-
+      return isFieldsFilled = true;
     }
   }
 

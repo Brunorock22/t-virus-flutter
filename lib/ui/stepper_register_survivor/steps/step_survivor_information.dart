@@ -80,12 +80,9 @@ class _StepSurvivorInformationState extends State<StepSurvivorInformation> {
             )
           ],
         ),
-        SizedBox(
-          height: 40,
-        ),
-        SizedBox(
-          height: 50,
-        ),
+
+
+
       ],
     );
 
