@@ -31,75 +31,81 @@ class _StepperRegisterSuvivorControllerState
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: secondaryColor,
-      body: new Stepper(
-          type: StepperType.vertical,
-          currentStep: _currentStep,
-          onStepTapped: (int step) => setState(() => _currentStep = step),
-          onStepContinue:
-              _currentStep < 1 ? () => setState(() => _currentStep += 1) : null,
-          onStepCancel:
-              _currentStep > 0 ? () => setState(() => _currentStep -= 1) : null,
-          controlsBuilder: (BuildContext context,
-              {VoidCallback onStepContinue, VoidCallback onStepCancel}) {
-            return Row(
-              mainAxisSize: MainAxisSize.max,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                _currentStep == 1 // this is the last step
-                    ? sendButton(
-                        textColor: primaryColor,
-                        title: 'SEND',
-                        fontFamily: "ZOMBIE",
-                        navigateToScreen: WelcomePage(),
-                        context: context)
-                    : RaisedButton.icon(
-                        icon: Icon(
-                          Icons.navigate_next,
-                          color: primaryColor,
-                        ),
-                        // ignore: unrelated_type_equality_checks
-                        onPressed: onStepContinue,
-                        label: Text(
-                          'CONTINUE',
-                          style: TextStyle(fontFamily: "ZOMBIE", fontSize: 25),
-                        ),
-                        textColor: primaryColor,
-                        color: accentColor,
-                      ),
-              ],
-            );
+      body: GestureDetector(
+          onTap: () {
+            //If user touch out of fields the keyborad will disapear
+            FocusScope.of(context).requestFocus(new FocusNode());
           },
-          steps: <Step>[
-            new Step(
-              title: new Text(
-                'Survivor Informations',
-                style: TextStyle(
-                    color: accentColor,
-                    fontFamily: 'ZOMBIETEXT',
-                    fontWeight: FontWeight.bold,
-                    fontSize: 20),
+        child: new Stepper(
+            type: StepperType.vertical,
+            currentStep: _currentStep,
+            onStepTapped: (int step) => setState(() => _currentStep = step),
+            onStepContinue:
+                _currentStep < 1 ? () => setState(() => _currentStep += 1) : null,
+            onStepCancel:
+                _currentStep > 0 ? () => setState(() => _currentStep -= 1) : null,
+            controlsBuilder: (BuildContext context,
+                {VoidCallback onStepContinue, VoidCallback onStepCancel}) {
+              return Row(
+                mainAxisSize: MainAxisSize.max,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  _currentStep == 1 // this is the last step
+                      ? sendButton(
+                          textColor: primaryColor,
+                          title: 'SEND',
+                          fontFamily: "ZOMBIE",
+                          navigateToScreen: WelcomePage(),
+                          context: context)
+                      : RaisedButton.icon(
+                          icon: Icon(
+                            Icons.navigate_next,
+                            color: primaryColor,
+                          ),
+                          // ignore: unrelated_type_equality_checks
+                          onPressed: onStepContinue,
+                          label: Text(
+                            'CONTINUE',
+                            style: TextStyle(fontFamily: "ZOMBIE", fontSize: 25),
+                          ),
+                          textColor: primaryColor,
+                          color: accentColor,
+                        ),
+                ],
+              );
+            },
+            steps: <Step>[
+              new Step(
+                title: new Text(
+                  'Survivor Informations',
+                  style: TextStyle(
+                      color: accentColor,
+                      fontFamily: 'ZOMBIETEXT',
+                      fontWeight: FontWeight.bold,
+                      fontSize: 20),
+                ),
+                isActive: _currentStep >= 0,
+                state:
+                    _currentStep >= 0 ? StepState.complete : StepState.disabled,
+                content:
+                    StepSurvivorInformation(survivor, survivorName, survivorAge),
               ),
-              isActive: _currentStep >= 0,
-              state:
-                  _currentStep >= 0 ? StepState.complete : StepState.disabled,
-              content:
-                  StepSurvivorInformation(survivor, survivorName, survivorAge),
-            ),
-            Step(
-              title: new Text(
-                'Supplies',
-                style: TextStyle(
-                    color: accentColor,
-                    fontFamily: 'ZOMBIETEXT',
-                    fontWeight: FontWeight.bold,
-                    fontSize: 20),
-              ),
-              content: StepSurvivorSupplies(survivor),
-              isActive: _currentStep >= 0,
-              state:
-                  _currentStep >= 1 ? StepState.complete : StepState.disabled,
-            )
-          ]),
+              Step(
+                title: new Text(
+                  'Supplies',
+                  style: TextStyle(
+                      color: accentColor,
+                      fontFamily: 'ZOMBIETEXT',
+                      fontWeight: FontWeight.bold,
+                      fontSize: 20),
+                ),
+                content: StepSurvivorSupplies(survivor),
+                isActive: _currentStep >= 0,
+                state:
+                    _currentStep >= 1 ? StepState.complete : StepState.disabled,
+              )
+            ]),
+      ),
     );
   }
 

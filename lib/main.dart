@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'file:///D:/Multimidia/Projetos/t_virus/lib/ui/stepper_register_survivor/stepper_register_survivor_controller.dart';
 import 'package:t_virus/ui/welcome_page.dart';
 
 import 'ui/shared/app_colors.dart';

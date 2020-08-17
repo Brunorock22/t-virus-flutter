@@ -31,59 +31,61 @@ class _StepSurvivorInformationState extends State<StepSurvivorInformation> {
   @override
   Widget build(BuildContext context) {
 
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: <Widget>[
-        Stack(
-          alignment: Alignment.topCenter,
-          children: <Widget>[
-            Padding(
-              padding: EdgeInsets.only(top: circleRadius / 2.0),
-              child: Card(
-                child: ColoredBox(
-                  color: primaryColor,
-                  child: Padding(
-                    padding: const EdgeInsets.only(top: 30.0),
-                    child: Column(
-                      children: <Widget>[
-                        showMaterialTextFiel(widget.survivorName, "Name", heigth: 50),
-                        showMaterialTextFiel(widget.survivorAge, "Age",
-                            heigth: 50,
-                            inputType: TextInputType.number,
-                            maxLength: 3),
-                        _divider(),
-                        _genderCheckBox()
-                      ],
+    return GestureDetector(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          Stack(
+            alignment: Alignment.topCenter,
+            children: <Widget>[
+              Padding(
+                padding: EdgeInsets.only(top: circleRadius / 2.0),
+                child: Card(
+                  child: ColoredBox(
+                    color: primaryColor,
+                    child: Padding(
+                      padding: const EdgeInsets.only(top: 30.0),
+                      child: Column(
+                        children: <Widget>[
+                          showMaterialTextFiel(widget.survivorName, "Name", heigth: 50),
+                          showMaterialTextFiel(widget.survivorAge, "Age",
+                              heigth: 50,
+                              inputType: TextInputType.number,
+                              maxLength: 3),
+                          _divider(),
+                          _genderCheckBox()
+                        ],
+                      ),
                     ),
                   ),
-                ),
-                color: Colors.white,
-              ),
-            ),
-            Container(
-              width: circleRadius,
-              height: circleRadius,
-              decoration:
-                  ShapeDecoration(shape: CircleBorder(), color: primaryColor),
-              child: Padding(
-                padding: EdgeInsets.all(circleBorderWidth),
-                child: DecoratedBox(
-                  decoration: ShapeDecoration(
-                      shape: CircleBorder(),
-                      image: DecorationImage(
-                          fit: BoxFit.cover,
-                          image: AssetImage(
-                            'images/ic_zombie_circular.png',
-                          ))),
+                  color: Colors.white,
                 ),
               ),
-            )
-          ],
-        ),
+              Container(
+                width: circleRadius,
+                height: circleRadius,
+                decoration:
+                    ShapeDecoration(shape: CircleBorder(), color: primaryColor),
+                child: Padding(
+                  padding: EdgeInsets.all(circleBorderWidth),
+                  child: DecoratedBox(
+                    decoration: ShapeDecoration(
+                        shape: CircleBorder(),
+                        image: DecorationImage(
+                            fit: BoxFit.cover,
+                            image: AssetImage(
+                              'images/ic_zombie_circular.png',
+                            ))),
+                  ),
+                ),
+              )
+            ],
+          ),
 
 
 
-      ],
+        ],
+      ),
     );
 
   }
