@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:t_virus/core/model/location.dart';
+import 'package:t_virus/core/database/dao/supplie_dao.dart';
+import 'package:t_virus/core/database/dao/survivor_dao.dart';
+import 'package:t_virus/core/model/supplie.dart';
 import 'package:t_virus/core/model/survivor.dart';
 import 'package:t_virus/core/service/gps_service.dart';
+import 'package:t_virus/core/service/people_service.dart';
 import 'package:t_virus/ui/shared/app_colors.dart';
 import 'package:t_virus/ui/welcome_page.dart';
 import 'package:t_virus/ui/widgets/flushbar_custom.dart';
@@ -19,7 +22,7 @@ class StepperRegisterSuvivorController extends StatefulWidget {
 class _StepperRegisterSuvivorControllerState
     extends State<StepperRegisterSuvivorController> {
   int _currentStep = 0;
-
+  bool isSendingProcessing = false;
   Survivor survivor = Survivor();
 
   TextEditingController survivorName = TextEditingController();
@@ -32,18 +35,20 @@ class _StepperRegisterSuvivorControllerState
     return Scaffold(
       backgroundColor: secondaryColor,
       body: GestureDetector(
-          onTap: () {
-            //If user touch out of fields the keyborad will disapear
-            FocusScope.of(context).requestFocus(new FocusNode());
-          },
+        onTap: () {
+          //If user touch out of fields the keyborad will disapear
+          FocusScope.of(context).requestFocus(new FocusNode());
+        },
         child: new Stepper(
             type: StepperType.vertical,
             currentStep: _currentStep,
             onStepTapped: (int step) => setState(() => _currentStep = step),
-            onStepContinue:
-                _currentStep < 1 ? () => setState(() => _currentStep += 1) : null,
-            onStepCancel:
-                _currentStep > 0 ? () => setState(() => _currentStep -= 1) : null,
+            onStepContinue: _currentStep < 1
+                ? () => setState(() => _currentStep += 1)
+                : null,
+            onStepCancel: _currentStep > 0
+                ? () => setState(() => _currentStep -= 1)
+                : null,
             controlsBuilder: (BuildContext context,
                 {VoidCallback onStepContinue, VoidCallback onStepCancel}) {
               return Row(
@@ -66,7 +71,8 @@ class _StepperRegisterSuvivorControllerState
                           onPressed: onStepContinue,
                           label: Text(
                             'CONTINUE',
-                            style: TextStyle(fontFamily: "ZOMBIE", fontSize: 25),
+                            style:
+                                TextStyle(fontFamily: "ZOMBIE", fontSize: 25),
                           ),
                           textColor: primaryColor,
                           color: accentColor,
@@ -87,8 +93,8 @@ class _StepperRegisterSuvivorControllerState
                 isActive: _currentStep >= 0,
                 state:
                     _currentStep >= 0 ? StepState.complete : StepState.disabled,
-                content:
-                    StepSurvivorInformation(survivor, survivorName, survivorAge),
+                content: StepSurvivorInformation(
+                    survivor, survivorName, survivorAge),
               ),
               Step(
                 title: new Text(
@@ -122,10 +128,15 @@ class _StepperRegisterSuvivorControllerState
           borderRadius: BorderRadius.all(Radius.circular(5.0))),
       elevation: 1.0,
       minWidth: minWidth,
-      height: 35,
+      height: 45,
       color: backgroundColor,
       onPressed: () => verifyField(),
-      child: new Text(title,
+      child: isSendingProcessing
+          ? Center(
+          child: CircularProgressIndicator(
+            backgroundColor: primaryColor,
+          ))
+          :Text(title,
           style: new TextStyle(
               fontSize: 25.0, color: textColor, fontFamily: fontFamily)),
     );
@@ -161,20 +172,83 @@ class _StepperRegisterSuvivorControllerState
           )).flushbar();
       return isFieldsFilled = false;
     } else {
+      setState(() {
+        isSendingProcessing = true;
+      });
+      survivor.name = survivorName.text;
       survivor.age = int.parse(survivorAge.text);
-      getUserLocation().then((value) {
-        LatLog latLog =
-            LatLog(latitude: value.latitude, longitude: value.longitude);
-        survivor.location = latLog;
+      getUserLocation();
+
 //        Navigator.push(
 //            context, MaterialPageRoute(builder: (context) => StepperWidget()));
-      });
       return isFieldsFilled = true;
     }
   }
 
-  Future<Position> getUserLocation() async {
+  Future<void> getUserLocation() async {
     GPSService gpsService = GPSService();
-    return gpsService.getUserLocation();
+    Position position = await gpsService.getUserLocation();
+    //Format the LogLat to the API
+    survivor.location = "Point(" +
+        position.longitude.toString() +
+        " " +
+        position.latitude.toString() +
+        ")";
+
+    saveSurvivor();
+  }
+
+  Future<void> saveSurvivor() async {
+    SurvivorDao.save(survivor).then((value) async {
+      saveSupplie();
+    }).catchError((e) {
+      print(e);
+      FlusBarCustom(
+          "Error while saving survivor.",
+          context,
+          Icon(
+            Icons.error,
+            color: errorColor,
+          )).flushbar();
+    });
+  }
+
+  Future<void> saveSupplie() async {
+    //Find the last survivor and relate his id to the supplies
+    Survivor lastSurvivor = await SurvivorDao.findLast();
+
+    survivor.supplies.forEach((supplie) {
+      supplie.survivorId = lastSurvivor.id;
+      //Save supplies
+      SupplieDao.save(supplie).catchError((e) {
+        FlusBarCustom(
+            "Error while saving survivor.",
+            context,
+            Icon(
+              Icons.error,
+              color: errorColor,
+            )).flushbar();
+      });
+    });
+
+    createSurvivor();
+
+  }
+
+  Future<bool> createSurvivor() async {
+    PeopleService peopleService = PeopleService();
+    bool  response = await peopleService.registerSurvivor(survivor);
+    if(!response){
+        FlusBarCustom(
+            "Error while communication with server",
+            context,
+            Icon(
+              Icons.error,
+              color: errorColor,
+            )).flushbar();
+    }
+    setState(() {
+      isSendingProcessing = false;
+    });
   }
 }

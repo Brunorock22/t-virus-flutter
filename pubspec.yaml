@@ -18,6 +18,10 @@ dependencies:
   flushbar:
   #Get the lat and log of the user
   geolocator:
+  #HTTP Cliient
+  dio: ^3.0.9
+  #Database
+  sqflite:
 
 
   cupertino_icons: ^0.1.3

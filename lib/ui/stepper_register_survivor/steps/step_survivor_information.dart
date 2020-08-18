@@ -1,7 +1,6 @@
 import 'package:circular_check_box/circular_check_box.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:t_virus/core/enum/gender.dart';
 import 'package:t_virus/core/model/survivor.dart';
 import 'package:t_virus/ui/shared/app_colors.dart';
 import 'package:t_virus/ui/widgets/custom_outline_text_field.dart';
@@ -152,12 +151,12 @@ class _StepSurvivorInformationState extends State<StepSurvivorInformation> {
                   setState(() {
                     if (touched) {
                       maleCheck = touched;
-                      widget.survivor.gender = Gender.MALE;
+                      widget.survivor.gender = "M";
 
                       femaleCheck = false;
                     } else {
                       maleCheck = touched;
-                      widget.survivor.gender = Gender.FEMALE;
+                      widget.survivor.gender = "F";
 
                       femaleCheck = true;
                     }
@@ -185,12 +184,12 @@ class _StepSurvivorInformationState extends State<StepSurvivorInformation> {
                   setState(() {
                     if (touched) {
                       femaleCheck = touched;
-                      widget.survivor.gender = Gender.FEMALE;
+                      widget.survivor.gender = "F";
 
                       maleCheck = false;
                     } else {
                       femaleCheck = touched;
-                      widget.survivor.gender = Gender.MALE;
+                      widget.survivor.gender = "M";
                       maleCheck = true;
                     }
                   });
