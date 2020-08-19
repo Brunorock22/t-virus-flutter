@@ -4,17 +4,19 @@ class Survivor {
   int id;
   String name;
   int age;
+  int autologin;
   String gender;
   String location;
   List<Supplie> supplies;
 
-  Survivor({this.id,this.name, this.age, this.gender, this.location, this.supplies});
+  Survivor({this.id,this.name, this.age, this.gender, this.location, this.supplies,this.autologin});
 
   Map<String, dynamic> toMap() {
     return {
       'id': id,
       'name': name,
       'gender': gender,
+      'autologin': autologin,
       'location': location,
       'supplies': supplies,
     };

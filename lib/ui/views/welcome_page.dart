@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:t_virus/core/util/utils.dart';
 
-import 'stepper_register_survivor/stepper_register_survivor_controller.dart';
-import 'shared/app_colors.dart';
-import 'widgets/custom_material_button.dart';
+import '../shared/app_colors.dart';
+import '../widgets/custom_material_button.dart';
+import 'register_survivor/stepper_register_survivor_controller.dart';
 
 class WelcomePage extends StatelessWidget{
   @override

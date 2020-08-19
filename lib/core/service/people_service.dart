@@ -24,7 +24,7 @@ class PeopleService {
       };
 
       r = await backend.io.post(BackendRoutes.people, data: data);
-      if (r.data.statusCode == 200 || r.statusCode == 201) {
+      if (r.statusCode == 200 || r.statusCode == 201) {
         return true;
       } else {
         return false;

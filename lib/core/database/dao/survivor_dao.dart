@@ -12,6 +12,7 @@ class SurvivorDao {
     userMap["id"] = survivor.id;
     userMap["name"] = survivor.name;
     userMap["age"] = survivor.age;
+    userMap["autologin"] = survivor.autologin;
     userMap["gender"] = survivor.gender.toString();
     userMap["location"] = survivor.location;
     return db.insert(USER_TABLE, userMap);
@@ -40,6 +41,7 @@ class SurvivorDao {
           id: row['id'],
           name: row['name'],
           age: row['age'],
+          autologin: row['autologin'],
           gender: row['gender'],
           location: row['location']);
       survivors.add(user);

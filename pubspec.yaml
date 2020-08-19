@@ -2,7 +2,7 @@ name: t_virus
 description: A new Flutter project.
 
 
-publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+publish_to: 'none'
 
 version: 1.0.0+1
 
@@ -14,14 +14,19 @@ dependencies:
     sdk: flutter
   # Custom CheckBox
   circular_check_box:
-  #FlushBar is used to advise user
+  # FlushBar is used to advise user
   flushbar:
-  #Get the lat and log of the user
+  # Get the lat and log of the user
   geolocator:
-  #HTTP Cliient
+  # HTTP Cliient
   dio: ^3.0.9
-  #Database
+  # Database
   sqflite:
+  # Bottom Navigator for the main screen
+  circular_bottom_navigation:
+  # Maps for the main traker screen
+  google_maps_flutter:
+  maps_launcher:
 
 
   cupertino_icons: ^0.1.3
@@ -32,12 +37,10 @@ dev_dependencies:
 
 
 flutter:
-
-
   uses-material-design: true
-
   assets:
-     - images/
+    - images/
+    - assets/styles/
 
   fonts:
     - family: ZOMBIE

@@ -9,6 +9,8 @@
         android:name="io.flutter.app.FlutterApplication"
         android:label="t_virus"
         android:icon="@mipmap/ic_launcher">
+        <meta-data android:name="com.google.android.geo.API_KEY"
+                   android:value="AIzaSyCStQ5MqPfq8LgNEUb5b0W4TbwxfF51zAQ"/>
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTop"
