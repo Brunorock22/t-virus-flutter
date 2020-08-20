@@ -1,6 +1,4 @@
 
-
-
 # T-Virus
 
 In this project the user or surviror as we call here, will be able to register himself in the first time and acumuleted supplies.
@@ -9,15 +7,10 @@ Then in the track tab the survivor will see all the survivors in the system plus
 ## Architecture
 *Provider
 
-
-
 ### Prerequisites
 
 You will need to install flutter and Dart.
 If you will compile in iOS you need the Xcode or Android Studio for Android
-
-
-
 
 ## Deployment
 
@@ -34,7 +27,6 @@ Please read [CONTRIBUTING.md](https://gist.github.com/PurpleBooth/b24679402957c6
 1.0.0
 
 ## Authors
-
 * **Bruno Camargos**  - [PurpleBooth](https://github.com/Brunorock22)
 
 See also the list of [contributors](https://github.com/your/project/contributors) who participated in this project.
