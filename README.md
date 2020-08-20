@@ -31,7 +31,6 @@ Flutter build ios-release
 ## Authors
 * **Bruno Camargos**  - [Git Account](https://github.com/Brunorock22)
 
-See also the list of [contributors](https://github.com/your/project/contributors) who participated in this project.
 
 ## Acknowledgments
 * Inspiration - https://gist.github.com/hjJunior/aeeff1bdec77fd4dadb749cff2c559db
