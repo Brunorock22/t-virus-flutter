@@ -23,7 +23,7 @@ Flutter build ios-release
 1.0.0
 
 ## Authors
-* **Bruno Camargos**  - [PurpleBooth](https://github.com/Brunorock22)
+* **Bruno Camargos**  - [Git Account](https://github.com/Brunorock22)
 
 See also the list of [contributors](https://github.com/your/project/contributors) who participated in this project.
 
