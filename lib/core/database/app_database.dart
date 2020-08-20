@@ -3,7 +3,7 @@ import 'package:sqflite/sqflite.dart';
 
 Future<Database> getDatabase() async {
   const int DATABASE_VERSION = 1;
-  const String DATABASE_NAME = 't_virus_data';
+  const String DATABASE_NAME = 't_virus_data_base';
   final String dbPath = await getDatabasesPath();
 
   final String path = join(dbPath, DATABASE_NAME);

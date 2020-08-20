@@ -27,7 +27,7 @@ dependencies:
   # Maps for the main traker screen
   google_maps_flutter:
   maps_launcher:
-
+  map_launcher:
 
   cupertino_icons: ^0.1.3
 

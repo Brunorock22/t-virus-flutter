@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
@@ -6,6 +8,7 @@ import 'package:t_virus/core/model/survivor.dart';
 import 'package:t_virus/core/service/people_service.dart';
 import 'package:t_virus/core/util/global_user_acess.dart';
 import 'package:t_virus/ui/shared/app_colors.dart';
+import 'package:map_launcher/map_launcher.dart' as mapl;
 
 class TrackerScreen extends StatefulWidget {
   @override
@@ -44,8 +47,8 @@ class _TrackerScreenState extends State<TrackerScreen> {
 
   void setCustomMapPin() async {
     pinLocationIcon = await BitmapDescriptor.fromAssetImage(
-        ImageConfiguration(size: Size(24, 24), devicePixelRatio: 2.5),
-        'images/zombie_walker.png');
+        ImageConfiguration(size: Size(100, 100), devicePixelRatio: 10.5),
+        'images/marker_custom.png');
   }
 
   void _onMapCreated(GoogleMapController controller) {
@@ -68,7 +71,7 @@ class _TrackerScreenState extends State<TrackerScreen> {
                     onMapCreated: _onMapCreated,
                     initialCameraPosition: CameraPosition(
                       target: _center,
-                      zoom: 5.0,
+                      zoom: 3.0,
                     ),
                     myLocationEnabled: true,
                     markers: markers,
@@ -85,7 +88,7 @@ class _TrackerScreenState extends State<TrackerScreen> {
                     itemBuilder: (context, index) {
                       return ListTile(
                         leading:
-                            Image.asset('images/ic_back_pack.png', width: 30),
+                            Image.asset('images/profile_survivor.png', width: 40),
                         title: Text(survivors[index].name,
                             style: TextStyle(
                                 color: accentColor,
@@ -102,6 +105,14 @@ class _TrackerScreenState extends State<TrackerScreen> {
                           Icons.map,
                           color: accentColor,
                         ),
+                        onTap: () {
+
+                          double longitude = double.parse(
+                              formatLatLogArray(survivors[index].location)[0]);
+                          double latitude = double.parse(
+                              formatLatLogArray(survivors[index].location)[1]);
+                          openRoute(lat: latitude, lon: longitude, name: survivors[index].name);
+                        },
                       );
                     },
                   ),
@@ -117,6 +128,7 @@ class _TrackerScreenState extends State<TrackerScreen> {
         });
   }
 
+  //remove all characters yet lat lon
   List<String> formatLatLogArray(location) {
     return location
         .replaceAll("Point(", "")
@@ -144,8 +156,51 @@ class _TrackerScreenState extends State<TrackerScreen> {
             infoWindow: InfoWindow(title: survivor.name),
             markerId: MarkerId(survivor.name),
             position: LatLng(latitude, longitude),
-            icon: pinLocationIcon));
+            icon: pinLocationIcon,
+            onTap: () {
+              showModal(lat: longitude, lon: longitude, name: survivor.name);
+              //_onMarkerTapped(markerId);
+            }));
       }
     });
+  }
+
+  void showModal({lat: double, lon: double, name: String}) {
+    //if is ios plataform custom modal is showed and the user will be able to go to the point
+    if (Platform.isIOS) {
+      showModalBottomSheet(
+          context: context,
+          builder: (context) {
+            return Column(
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                ListTile(
+                  leading: Icon(Icons.map),
+                  title: Text('Wanna go to: ' + name),
+                  trailing: Icon(Icons.arrow_forward),
+                  onTap: () => openRoute(lat: lat, lon: lon, name: name),
+                ),
+              ],
+            );
+          });
+    }
+  }
+
+  void openRoute({double lat, double lon, String name}) async {
+    if (Platform.isIOS) {
+      // ignore: deprecated_member_use
+      await mapl.MapLauncher.launchMap(
+        mapType: mapl.MapType.apple,
+        coords: mapl.Coords(lat, lon),
+        title: name,
+      );
+    } else {
+      // ignore: deprecated_member_use
+      await mapl.MapLauncher.launchMap(
+        mapType: mapl.MapType.google,
+        coords: mapl.Coords(lat, lon),
+        title: name,
+      );
+    }
   }
 }
