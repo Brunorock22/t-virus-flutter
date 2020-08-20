@@ -3,7 +3,7 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 
-///Interceptor para tratar os erros gerados do backend.
+///Interceptor to trate error in requests
 class AppInterceptor extends Interceptor {
   List errors;
   bool returnLogin = false;

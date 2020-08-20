@@ -58,74 +58,77 @@ class _TrackerScreenState extends State<TrackerScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
-        future: getAllSurvivor(),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.done) {
-            return Column(
-              children: [
-                Container(
-                  color: primaryColor,
-                  height: MediaQuery.of(context).size.height / 2,
-                  child: GoogleMap(
-                    onMapCreated: _onMapCreated,
-                    initialCameraPosition: CameraPosition(
-                      target: _center,
-                      zoom: 3.0,
+    return WillPopScope(
+      onWillPop: () async => false,
+      child: FutureBuilder(
+          future: getAllSurvivor(),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.done) {
+              return Column(
+                children: [
+                  Container(
+                    color: primaryColor,
+                    height: MediaQuery.of(context).size.height / 2,
+                    child: GoogleMap(
+                      onMapCreated: _onMapCreated,
+                      initialCameraPosition: CameraPosition(
+                        target: _center,
+                        zoom: 3.0,
+                      ),
+                      myLocationEnabled: true,
+                      markers: markers,
                     ),
-                    myLocationEnabled: true,
-                    markers: markers,
                   ),
-                ),
-                Expanded(
-                  child: ListView.separated(
-                    separatorBuilder: (BuildContext context, int index) =>
-                        Divider(
-                      height: 2,
-                      color: accentColor,
-                    ),
-                    itemCount: survivors.length,
-                    itemBuilder: (context, index) {
-                      return ListTile(
-                        leading:
-                            Image.asset('images/profile_survivor.png', width: 40),
-                        title: Text(survivors[index].name,
-                            style: TextStyle(
-                                color: accentColor,
-                                fontSize: 14,
-                                fontWeight: FontWeight.w300)),
-                        subtitle: Text(
-                            'Age: ' + survivors[index].age.toString(),
-                            style: TextStyle(
-                                color: accentColor,
-                                fontWeight: FontWeight.w300,
-                                fontSize: 12,
-                                fontStyle: FontStyle.italic)),
-                        trailing: Icon(
-                          Icons.map,
-                          color: accentColor,
-                        ),
-                        onTap: () {
+                  Expanded(
+                    child: ListView.separated(
+                      separatorBuilder: (BuildContext context, int index) =>
+                          Divider(
+                        height: 2,
+                        color: accentColor,
+                      ),
+                      itemCount: survivors.length,
+                      itemBuilder: (context, index) {
+                        return ListTile(
+                          leading:
+                              Image.asset('images/profile_survivor.png', width: 40),
+                          title: Text(survivors[index].name,
+                              style: TextStyle(
+                                  color: accentColor,
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w300)),
+                          subtitle: Text(
+                              'Age: ' + survivors[index].age.toString(),
+                              style: TextStyle(
+                                  color: accentColor,
+                                  fontWeight: FontWeight.w300,
+                                  fontSize: 12,
+                                  fontStyle: FontStyle.italic)),
+                          trailing: Icon(
+                            Icons.map,
+                            color: accentColor,
+                          ),
+                          onTap: () {
 
-                          double longitude = double.parse(
-                              formatLatLogArray(survivors[index].location)[0]);
-                          double latitude = double.parse(
-                              formatLatLogArray(survivors[index].location)[1]);
-                          openRoute(lat: latitude, lon: longitude, name: survivors[index].name);
-                        },
-                      );
-                    },
+                            double longitude = double.parse(
+                                formatLatLogArray(survivors[index].location)[0]);
+                            double latitude = double.parse(
+                                formatLatLogArray(survivors[index].location)[1]);
+                            openRoute(lat: latitude, lon: longitude, name: survivors[index].name);
+                          },
+                        );
+                      },
+                    ),
                   ),
-                ),
-              ],
-            );
-          } else {
-            return Center(
-                child: CircularProgressIndicator(
-              backgroundColor: primaryColor,
-            ));
-          }
-        });
+                ],
+              );
+            } else {
+              return Center(
+                  child: CircularProgressIndicator(
+                backgroundColor: primaryColor,
+              ));
+            }
+          }),
+    );
   }
 
   //remove all characters yet lat lon

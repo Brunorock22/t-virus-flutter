@@ -27,8 +27,4 @@ class Backend{
 
   }
 
-  void addToken(String token){
-    io.options.headers = {"Authorization" : "Bearer " + token};
-  }
-
 }

@@ -28,8 +28,18 @@ dependencies:
   google_maps_flutter:
   maps_launcher:
   map_launcher:
-
+  # For the lauch icons
+  flutter_launcher_icons:
   cupertino_icons: ^0.1.3
+
+
+flutter_icons:
+  image_path: "images/ic_launch_zombie.png"
+  android: true
+  ios: true
+
+flutter_launcher_name:
+  name: "T-Virus"
 
 dev_dependencies:
   flutter_test:
@@ -49,3 +59,4 @@ flutter:
     - family: ZOMBIETEXT
       fonts:
         - asset: assets/fonts/zombie_texts.TTF
+
