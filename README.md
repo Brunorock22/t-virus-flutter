@@ -1,17 +1,45 @@
-# t_virus
 
-A new Flutter project.
 
-## Getting Started
 
-This project is a starting point for a Flutter application.
+# T-Virus
 
-A few resources to get you started if this is your first Flutter project:
+In this project the user or surviror as we call here, will be able to register himself in the first time and acumuleted supplies.
+Then in the track tab the survivor will see all the survivors in the system plus the may localize them in maps.
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
+## Architecture
+*Provider
 
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
-"# t-virus-flutter" 
+
+
+### Prerequisites
+
+You will need to install flutter and Dart.
+If you will compile in iOS you need the Xcode or Android Studio for Android
+
+
+
+
+## Deployment
+
+Flutter build appbundle.
+Flutter build ios-release
+
+
+## Contributing
+
+Please read [CONTRIBUTING.md](https://gist.github.com/PurpleBooth/b24679402957c63ec426) for details on our code of conduct, and the process for submitting pull requests to us.
+
+## Versioning
+
+1.0.0
+
+## Authors
+
+* **Bruno Camargos**  - [PurpleBooth](https://github.com/Brunorock22)
+
+See also the list of [contributors](https://github.com/your/project/contributors) who participated in this project.
+
+## Acknowledgments
+* Inspiration - https://gist.github.com/hjJunior/aeeff1bdec77fd4dadb749cff2c559db
+This challegend was provided by ## https://gist.github.com/hjJunior.
+I couldn't  respect all the requirements by the time I had for the challenge, so I focus in doing the maximum I could.
