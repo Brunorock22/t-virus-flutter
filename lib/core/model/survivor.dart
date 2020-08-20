@@ -21,4 +21,12 @@ class Survivor {
       'supplies': supplies,
     };
   }
+
+  Survivor.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    name = json['name'];
+    age = json['age'];
+    gender = json['gender'];
+    location = json['lonlat'];
+  }
 }

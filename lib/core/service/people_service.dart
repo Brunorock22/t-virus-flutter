@@ -8,11 +8,10 @@ class PeopleService {
   Response r;
 
   Future<bool> registerSurvivor(Survivor survivor) async {
-    Backend backend = Backend.instance();
-    Response r;
     List<String> items = List();
     survivor.supplies.forEach((element) {
-      if (element.quantity > 0) items.add(element.name+":"+element.points.toString());
+      if (element.quantity > 0)
+        items.add(element.name + ":" + element.points.toString());
     });
     try {
       Map data = {
@@ -31,6 +30,22 @@ class PeopleService {
       }
     } catch (e) {
       return false;
+    }
+  }
+
+  Future<List<Survivor>> getAllSurvivor() async {
+    List<Survivor> survivors = List();
+
+    r = await backend.io.get(BackendRoutes.people);
+    if (r.statusCode == 200 || r.statusCode == 201) {
+      List<dynamic> jsonList = r.data;
+      jsonList.forEach((survivor) {
+        survivors.add(Survivor.fromJson(survivor));
+      });
+
+      return survivors;
+    } else {
+      return null;
     }
   }
 }
